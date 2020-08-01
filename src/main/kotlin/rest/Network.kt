@@ -56,10 +56,6 @@ class Network : Thread(){
 
         override fun run() {
             val request = br.readLine()
-            println(request)
-            while (br.ready()) {
-                println(br.readLine())
-            }
 
             BufferedWriter(OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8)).use { bw ->
                 when {
