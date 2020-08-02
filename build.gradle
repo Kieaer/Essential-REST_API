@@ -26,11 +26,11 @@ dependencies {
 }
 
 jar {
-    enabled = false // disable original
-    dependsOn(shadowJar) // add new task
+    enabled = false
+    dependsOn(shadowJar)
 }
 
 shadowJar {
-    archiveFileName = "${project.archivesBaseName}.jar" // remove jar classifier and version
-    minimize() // remove unused classes
+    archiveFileName = "${project.archivesBaseName}.jar"
+    minimize()
 }
