@@ -4,7 +4,7 @@ import arc.Core
 import com.ip2location.IP2Location
 import com.neovisionaries.i18n.CountryCode
 import mindustry.Vars
-import mindustry.entities.type.Player
+import mindustry.gen.Playerc
 import java.sql.Timestamp
 import java.time.LocalDateTime
 import java.util.*
@@ -24,7 +24,7 @@ class Tool {
     }
 
     fun getGeo(data: Any): Locale {
-        val ip = if (data is Player) Vars.netServer.admins.getInfo(data.uuid).lastIP else (data as String?)!!
+        val ip = if (data is Playerc) Vars.netServer.admins.getInfo(data.uuid()).lastIP else (data as String?)!!
 
         val ipre = IP2Location()
         ipre.IPDatabasePath = Core.settings.dataDirectory.child("mods/Essentials/data/IP2LOCATION-LITE-DB1.BIN").absolutePath()

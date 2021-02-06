@@ -3,12 +3,9 @@ package rest
 import arc.Core
 import arc.util.Log
 import mindustry.Vars
-import mindustry.Vars.playerGroup
-import mindustry.Vars.world
 import mindustry.core.GameState
 import mindustry.core.Version
-import mindustry.game.Gamemode
-import mindustry.type.ItemType
+import mindustry.gen.Groups
 import org.hjson.JsonArray
 import org.hjson.JsonObject
 import org.hjson.Stringify
@@ -102,15 +99,13 @@ class Network : Thread(){
 
         private fun getJson(): JsonObject{
             val json = JsonObject()
-            json.add("players", playerGroup.size()) // 플레이어 인원
+            json.add("players", Groups.player.size()) // 플레이어 인원
             json.add("version", Version.build) // 버전
             json.add("plugin-version", pluginVersion)
             json.add("name", Core.settings.getString("servername"))
-            json.add("mapname", world.map.name())
+            json.add("mapname", Vars.state.map.name())
             json.add("wave", Vars.state.wave)
             json.add("enemy-count", Vars.state.enemies)
-            json.add("gamemode", Gamemode.bestFit(Vars.state.rules).name)
-
 
             val maps = JsonArray()
             for (map in Vars.maps.all()) {
@@ -119,8 +114,8 @@ class Network : Thread(){
             json.add("maps",maps)
 
             var online = false
-            for (p in playerGroup.all()) {
-                if (p.isAdmin) {
+            for (p in Groups.player) {
+                if (p.admin()) {
                     online = true
                     break
                 }
@@ -128,9 +123,9 @@ class Network : Thread(){
             json.add("admin_online", online)
 
             val players = JsonObject()
-            for (p in playerGroup.all()) {
+            for (p in Groups.player) {
                 val pstmt = conn.prepareStatement("SELECT * from players WHERE uuid=?")
-                pstmt.setString(1, p.uuid)
+                pstmt.setString(1, p.uuid())
                 val rs = pstmt.executeQuery()
                 if(rs.next()){
                     val buffer = JsonObject()
@@ -160,11 +155,7 @@ class Network : Thread(){
             val team = JsonObject()
             for(t in Vars.state.teams.active){
                 val items = JsonObject()
-                for (item in Vars.content.items()) {
-                    if (item.type == ItemType.material) {
-                        items.add(item.name, Vars.state.teams[t.team].cores.first().items[item]) // resources
-                    }
-                }
+                for (item in Vars.content.items()) items.add(item.name, Vars.state.teams[t.team].cores.first().items[item])
                 team.add(t.team.name, items)
             }
             json.add("resource", team)

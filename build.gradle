@@ -1,19 +1,16 @@
 plugins {
-    id 'java-library'
-    id 'org.jetbrains.kotlin.jvm' version '1.4.10'
-    id 'com.github.johnrengelman.shadow' version '5.2.0'
+    id 'org.jetbrains.kotlin.jvm' version '1.4.30'
 }
 
 repositories {
     jcenter()
     maven { url 'https://www.jitpack.io' }
-    maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
     mavenCentral()
 }
 
 dependencies {
-    compileOnly 'com.github.Anuken.Arc:arc-core:v121.4'
-    compileOnly 'com.github.Anuken.Mindustry:core:v121.4'
+    compileOnly 'com.github.Anuken.Arc:arc-core:+'
+    compileOnly 'com.github.Anuken.Mindustry:core:+'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
     implementation "com.h2database:h2:1.4.200"
@@ -21,16 +18,11 @@ dependencies {
     implementation files('ip2location.jar')
     implementation 'com.neovisionaries:nv-i18n:1.27'
     implementation 'org.jsoup:jsoup:1.13.1'
-
-    testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
 jar {
-    enabled = false
-    dependsOn(shadowJar)
-}
-
-shadowJar {
     archiveFileName = "${project.archivesBaseName}.jar"
-    minimize()
+    from{
+        configurations.runtimeClasspath.collect{it.isDirectory() ? it : zipTree(it)}
+    }
 }

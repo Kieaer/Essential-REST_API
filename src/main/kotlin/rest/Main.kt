@@ -4,7 +4,7 @@ import arc.ApplicationListener
 import arc.Core
 import arc.util.Log
 import mindustry.Vars.mods
-import mindustry.plugin.Plugin
+import mindustry.mod.Plugin
 
 class Main : Plugin() {
     companion object {
