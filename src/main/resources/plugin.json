@@ -3,5 +3,5 @@
   "author": "Kieaer",
   "main": "rest.Main",
   "description": "Mindustry server rest api plugin",
-  "version": "1.0"
+  "version": "2.0"
 }
